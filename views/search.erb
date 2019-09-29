@@ -1,0 +1,36 @@
+<div class="search-box">
+  <h2 class="content-subhead">Search</h2>
+
+  <form action="/search" method="get">
+    <input name="query" value="<%= @search_string %>">
+    <button type="submit">Search</button>
+  </form>
+</div>
+
+<% if @search_string %>
+  <div class="search-results">
+    <% if @matched_contents.empty? %>
+      <p>Sorry, no matches were found.</p>
+    <% else %>
+      <h2 class="content-subhead">Results for '<%= @search_string %>'</h2>
+
+      <ul>
+        <% @matched_contents.each do |chapter| %>
+          <li>
+            <h4><%= chapter[:name] %></h4>
+
+            <ul>
+              <% chapter[:paragraphs].each do |id, content| %>
+                <li>
+                  <a href="/chapters/<%= chapter[:number] %>#p<%= id %>">
+                    <%= highlight_matches(content, @search_string) %>
+                  </a>
+                </li>
+              <% end %>
+            </ul>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+<% end %>
